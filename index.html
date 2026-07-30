@@ -17,7 +17,7 @@
           <select name="category" onchange=" filterBooks(this.value)"  id="category">
               <option selected value="">category</option>
               <option value="fantasy">fantasy</option>
-              <option value="comisc">comisc</option>
+              <option value="comic">comic</option>
               <option value="history">history</option>
               <option value="sci-fi">sci-fi</option>
               <option value="self-help">self-help</option>
@@ -27,6 +27,11 @@
             <button type="button" class="btn btn-primary" onclick="addNew()">Add</button>
         </div>
     </nav>
+    <div class="statistics d-flex gap-3 m-1">
+        <p>Total: <span class="total text-info" >0</span></p>
+ <p>Avalable: <span class="ava text-success">0</span></p>
+  <p>Isuued: <span class="issue text-danger">0</span></p>
+    </div>
     <section class="container">
         <div class="cards row">
 
