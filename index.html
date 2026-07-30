@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
+      crossorigin="anonymous"
+    />
+    <title>Library</title>
+  </head>
+  <body>
+    <nav class="navbar sticky-top navbar-light bg-light ">
+      <div class="d-flex flex-column flex-md-row mx-auto justify-around gap-3">
+          <select name="category" onchange=" filterBooks(this.value)"  id="category">
+              <option selected value="">category</option>
+              <option value="fantasy">fantasy</option>
+              <option value="comisc">comisc</option>
+              <option value="history">history</option>
+              <option value="sci-fi">sci-fi</option>
+              <option value="self-help">self-help</option>
+              <option value="other">other</option>
+            </select>
+            <input type="text" oninput="showBooks(this.value.trim())" placeholder="search" />
+            <button type="button" class="btn btn-primary" onclick="addNew()">Add</button>
+        </div>
+    </nav>
+    <section class="container">
+        <div class="cards row">
+
+        </div>
+    </section>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://code.jquery.com/jquery-4.0.0.js" integrity="sha256-9fsHeVnKBvqh3FB2HYu7g2xseAZ5MlN6Kz/qnkASV8U=" crossorigin="anonymous"></script>
+    <script src="js.js"></script>
+  </body>
+</html>
