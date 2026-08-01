@@ -9,28 +9,45 @@
       integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
       crossorigin="anonymous"
     />
+    <style>
+      .category option{
+        text-transform: capitalize;
+      }
+      .category {
+        text-transform: capitalize;
+      }
+      input{
+        padding-left: 3px ;
+      }
+      .disable{
+          pointer-events: none; 
+          opacity: 0.6;
+    background-color: #f8f9fa;
+      }
+    </style>
     <title>Library</title>
   </head>
   <body>
     <nav class="navbar sticky-top navbar-light bg-light ">
       <div class="d-flex flex-column flex-md-row mx-auto justify-around gap-3">
-          <select name="category" onchange=" filterBooks(this.value)"  id="category">
-              <option selected value="">category</option>
-              <option value="fantasy">fantasy</option>
-              <option value="comic">comic</option>
-              <option value="history">history</option>
-              <option value="sci-fi">sci-fi</option>
-              <option value="self-help">self-help</option>
-              <option value="other">other</option>
+          <select name="category" style="padding: 5px;"  id="category">
+              <option selected value="">Category</option>
+              <option value="fantasy">Fantasy</option>
+              <option value="comic">Comic</option>
+              <option value="history">History</option>
+              <option value="sci-fi">Sci-fi</option>
+              <option value="self-help">Self-help</option>
+              <option value="other">Other</option>
             </select>
-            <input type="text" oninput="showBooks(this.value.trim())" placeholder="search" />
-            <button type="button" class="btn btn-primary" onclick="addNew()">Add</button>
+            <input type="text" id="searchIn" placeholder=" search" />
+            
         </div>
     </nav>
     <div class="statistics d-flex gap-3 m-1">
-        <p>Total: <span class="total text-info" >0</span></p>
- <p>Avalable: <span class="ava text-success">0</span></p>
-  <p>Isuued: <span class="issue text-danger">0</span></p>
+        <p class="mt-1">Total: <span class="total text-info" >0</span></p>
+ <p class="mt-1">Avalable: <span class="ava text-success">0</span></p>
+  <p class="mt-1">Isuued: <span class="issue text-danger">0</span></p>
+  <button type="button" class="btn pt-0 btn-primary mt-1 " style="height: 30px;" onclick="addNew()">Add</button>
     </div>
     <section class="container">
         <div class="cards row">

@@ -92,20 +92,42 @@ if (loStor != null) {
   books = loStor;
 }
 let filterdBooks = [];
+//flag for filter ,select all & active form
+let setCat=false;
+let setAll=true;
+let active=false;
 // filter books selected category
 function filterBooks(cate) {
-  filterdBooks = books.filter((book) => book.category.toLowerCase() == cate);
+    setCat = false;
+  filterdBooks = [];
+  if(cate==''){setAll=true;setCat=false;showBooks();  return;}
+   setAll=false;
+  if(cate!=""){
+    filterdBooks = books.filter((book) => book.category.toLowerCase() == cate);
+    if(!filterdBooks.length){
+      setCat=true;
+    }
+  }else{
+    setCat=false;
+  }
+ 
   showBooks();
 }
 states();
 function showBooks(key = "") {
   $(".cards").empty();
   let searchList = [];
-  if (filterdBooks.length) {
-    searchList = filterdBooks;
-  } else {
-    searchList = books;
-  }
+
+    if(setCat){
+      $(".cards").empty();return;
+    }
+    
+    if (filterdBooks.length && !setAll) {
+      searchList = filterdBooks;
+    } else {
+      searchList = books;
+    }
+
   searchList.forEach((book) => {
 
     const card = `<div class="card p-3 mx-auto my-3 shadow-sm" style="width: 300px; height: 300px;">
@@ -138,11 +160,19 @@ function showBooks(key = "") {
 showBooks();
 
 function dltBook(btn) {
-  $(btn).closest(".card").remove();
-  const id = $(btn).closest(".card").find(".bookId").text();
-  books = books.filter((book) => book.bookId != id);
-  localStorage.setItem("books", JSON.stringify(books));
-  states();
+    const $card = $(btn).closest(".card");
+    const id = $card.find(".bookId").text();
+    $card.remove();
+    books = books.filter(book => book.bookId != id);
+    localStorage.setItem("books", JSON.stringify(books));
+    //check for edit form was delete
+    active = $(".form").length > 0;
+    //if no active form enable serach and category input
+    if(!active){
+       $("#category").removeClass("disable");
+  $("#searchIn").removeClass("disable");
+    }
+    states();
 }
 
 function editSave(btn) {
@@ -153,18 +183,23 @@ function editSave(btn) {
   let category = $card.find(".category").text().trim();  
   let available = $card.find(".available").text();
   let author = $card.find(".author").text();
+if(!active){
+
 
   //edit form
   if ($(btn).text() == "Edit") {
+     $("#category").addClass("disable");
+     $("#searchIn").val('');
+  $("#searchIn").addClass("disable");
+    active=true;
     const card = `
 <form action="submit" class="form"> 
     <div class="d-flex justify-content-between border-bottom pb-2 mb-3">
         <p class="mb-0 text-truncate " style="width:80%">
-            <input type="text" class="title p-0" value="${title}" placeholder="title here" required style="width:90%">
+            <input type="text" class="title " value="${title}" placeholder="title here" required style="width:90%">
         </p>
      <p class="mb-0  text-success available">
         <select value="${available}" class="p-0" required>
-        ${console.log(available)}
 ${
   available == "available"
     ? `<option value="available" selected>available</option>`
@@ -182,7 +217,7 @@ ${
     <div class="details">
         <p class="mb-1">BookId :
              <strong class="bookId ">${id}</strong>
-        <p class="mb-1">Author : <input class="author p-0" type="text" placeholder="author" value="${author}" required></p>
+        <p class="mb-1">Author : <input class="author " type="text" placeholder="author" value="${author}" required></p>
        <p class="mb-0">Category :
          <select value="${category}" class="p-0 category" required>
 ${
@@ -227,7 +262,13 @@ ${
 
 
     $card.html(card);
-  } else {
+}
+  } else if($(btn).text() == "Save"){
+  // set no active form
+  active=false;
+   //when save form enable search and category input
+  $("#category").removeClass("disable");
+  $("#searchIn").removeClass("disable");
 const form=$card.find("form");
     if (!$card.find(".form")[0].reportValidity()) {
         return;
@@ -280,6 +321,21 @@ const form=$card.find("form");
   }
 }
 function addNew() {
+  // if pending new or edit no add new 
+  if(active){return}
+  active=true;
+  //disable and reset category and search
+   $("#category").addClass("disable");
+  $("#category").html(` <option selected value="">Category</option>
+              <option value="fantasy">Fantasy</option>
+              <option value="comic">Comic</option>
+              <option value="history">History</option>
+              <option value="sci-fi">Sci-fi</option>
+              <option value="self-help">Self-help</option>
+              <option value="other">Other</option>`);
+  $("#searchIn").val('');
+  $("#searchIn").addClass("disable");
+  showBooks();
   const id = Math.floor(Math.random() * 9999 + 100);
   let title = "";
   let category = "";
@@ -289,7 +345,7 @@ function addNew() {
 <form action="submit" class="form"> 
     <div class="d-flex justify-content-between border-bottom pb-2 mb-3">
         <p class="mb-0 text-truncate " style="width:80%">
-            <input type="text" class="title p-0" placeholder="title here" value="${title}" required style="width:90%">
+            <input type="text" class="title " placeholder="title here" value="${title}" required style="width:90%">
         </p>
      <p class="mb-0  text-success available">
         <select value="${available}" required class="p-0">
@@ -310,9 +366,9 @@ ${
     <div class="details">
         <p class="mb-1">BookId :
              <strong class="bookId ">${id}</strong>
-        <p class="mb-1">Author : <input class="author p-0" type="text" value="${author}" placeholder="author" required></p>
+        <p class="mb-1">Author : <input class="author " type="text" value="${author}" placeholder="author" required></p>
          <p class="mb-0">Category :
-         <select value="${category}" class="p-0 category" required>
+         <select value="${category}" class=" category" required>
 ${
   category == "fantasy"
     ? `<option value="fantasy" selected>fantasy</option>`
@@ -369,3 +425,18 @@ function states() {
     $(".ava").text(available)
     $(".issue").text(issued);;
 }
+//input 
+$("#searchIn").on("input", function () {
+    if (active) {
+        $("#searchIn").val("");   
+    }
+    showBooks($(this).val().trim());
+})
+// category btn
+$("#category").on("input", function () {
+    if (active) {
+        return;
+    }
+    
+    filterBooks($(this).val().trim());
+});
